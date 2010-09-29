@@ -18,14 +18,14 @@ from Products.CMFPlone.tests.utils import MockMailHost
 PloneTestCase.installProduct('niteoweb.click2sell')
 PloneTestCase.setupPloneSite(products=('niteoweb.click2sell',))
 
-class click2sellIntegrationTestCase(PloneTestCase.PloneTestCase):
+class Click2SellIntegrationTestCase(PloneTestCase.PloneTestCase):
     """We use this base class for all integration tests in this package. 
     These tests are integration "unit" test. They use PloneTestCase, to have
     a full Plone site to play with but they interact with Plone on a low level,
     below user UI.
     """
 
-class click2sellFunctionalTestCase(PloneTestCase.FunctionalTestCase):
+class Click2SellFunctionalTestCase(PloneTestCase.FunctionalTestCase):
     """We use this base class for all functional tests in this package. 
     These tests are full-blown functional test. The emphasis is on testing what
     the user may input and see, and the system is largely tested as a black box.
@@ -39,7 +39,7 @@ class click2sellFunctionalTestCase(PloneTestCase.FunctionalTestCase):
         """Prepare a testbrowser instance and a debugging environment."""
         
         # run afterSetUp of it's parent class
-        super(click2sellFunctionalTestCase, self).afterSetUp()
+        super(Click2SellFunctionalTestCase, self).afterSetUp()
 
         # create testbrowser instance
         self.browser = Browser()
@@ -87,7 +87,7 @@ class click2sellFunctionalTestCase(PloneTestCase.FunctionalTestCase):
         file.write(self.browser.contents)
         os.system('open /tmp/niteoweb.click2sell.testbrowser.html')
         
-class click2sellControlPanelTestCase(click2sellFunctionalTestCase, ControlPanelTestCase):
+class Click2SellControlPanelTestCase(Click2SellFunctionalTestCase, ControlPanelTestCase):
     """Test case used for control panel tests, with some convenience 
     methods from plone.app.controlpanel. """
     

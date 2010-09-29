@@ -18,7 +18,7 @@ _ = Click2SellMessageFactory
 def configure_click2sell(context):
     return getUtility(IClick2SellSettings)
 
-class Configureclick2sellForm(ControlPanelForm):
+class ConfigureClick2SellForm(ControlPanelForm):
     """A ControlPanelForm BrowserView for click2sell configuration configlet."""
     form_fields = form.Fields(IClick2SellSettings)
     form_name = _("Configure click2sell")

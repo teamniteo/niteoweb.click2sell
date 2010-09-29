@@ -10,15 +10,15 @@ from mocker import Mocker, ARGS, KWARGS
 
 from Products.CMFCore.utils import getToolByName
 
-from niteoweb.click2sell.tests import click2sellIntegrationTestCase, MockMailHostTestCase
+from niteoweb.click2sell.tests import Click2SellIntegrationTestCase, MockMailHostTestCase
 
 
-class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
-    """Test all aspects of @@click2sell."""
+class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
+    """Test all aspects of @@Click2Sell."""
 
     def afterSetUp(self):
         """Prepare testing environment."""
-        super(Testclick2sell, self).afterSetUp()
+        super(TestClick2Sell, self).afterSetUp()
         self.view = self.portal.restrictedTraverse('click2sell')
         self.mailhost = self.portal.MailHost
         self.registration = getToolByName(self.portal, 'portal_registration')
@@ -62,8 +62,8 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
         mock_view._parse_POST(ARGS, KWARGS)
         mocker.result(dict(username='username'))
 
-        # mock return from _create_or_update_member
-        mock_view._create_or_update_member(ARGS, KWARGS)
+        # mock return from create_or_update_member
+        mock_view.create_or_update_member(ARGS, KWARGS)
         mocker.result(True)
         mocker.replay()
                 
@@ -80,23 +80,9 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
     def test_verify_POST(self):
         """Test POST verification process."""
         params = dict(
-                    ccustname = 'test',
-                    ccustemail = 'test',
-                    ccustcc = 'test',
-                    ccuststate = 'test',
-                    ctransreceipt = 'test',
-                    cproditem = 'test',
-                    ctransaction = 'test',
-                    ctransaffiliate= 'test',
-                    ctranspublisher= 'test',
-                    cprodtype= 'test',
-                    cprodtitle= 'test',
-                    ctranspaymentmethod= 'test',
-                    ctransamount= 'test',
-                    caffitid= 'test',
-                    cvendthru = 'test',
-                    cverify = '1B8383BF',
-                    secret_key= 'secret',
+                    secretkey= 'secret',
+                    acquirer_transaction_id='123',
+                    checksum='B457E943',
                     )
 
         verified = self.view._verify_POST(params)
@@ -105,22 +91,24 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
     def test_parse_POST(self):
         """Test that POST parameters are correctly mirrored into member fields."""
         params = dict(
-                    ccustname = 'fullname',
-                    ccustemail = 'email',
-                    ctransreceipt = 'last_purchase_id',
-                    cproditem = 'product_id',
-                    ctransaffiliate= 'affiliate',
-                    ctranstime = '1262300400'
+                    buyer_name = 'full',
+                    buyer_surname = 'name',
+                    buyer_email = 'email',
+                    c2s_transaction_id = 'last_purchase_id',
+                    product_id = 'product_id',
+                    affiliate_username= 'affiliate',
+                    purchase_date = '2010-01-01',
+                    purchase_time = '00:00:00',
                     )
-        
+
         expected = dict(
-                        fullname = 'fullname',
+                        fullname = u'full name',
                         username = 'email',
                         email = 'email',
                         product_id = 'product_id',
                         affiliate = 'affiliate',
                         last_purchase_id = 'last_purchase_id',
-                        last_purchase_timestamp = DateTime('2010/01/01'),
+                        last_purchase_timestamp = DateTime('2010-01-01 00:00:00'),
                         )
 
         result = self.view._parse_POST(params)
@@ -151,7 +139,7 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
         mocker.replay()
         
         # run method
-        self.view._create_or_update_member(test_data['username'], test_data)
+        self.view.create_or_update_member(test_data['username'], test_data)
         
         # test member
         member = self.portal.acl_users.getUserById(test_data['username'])
@@ -188,7 +176,7 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
         self.registration.addMember(old_data['username'], 'test_password', properties=old_data)
                         
         # run method
-        self.view._create_or_update_member(new_data['username'], new_data)
+        self.view.create_or_update_member(new_data['username'], new_data)
         
         # test member
         member = self.portal.acl_users.getUserById(new_data['username'])
@@ -209,7 +197,7 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
                     )
 
         # set portal properties
-        self.portal.title = u'click2sell Integration Site'
+        self.portal.title = u'Click2Sell Integration Site'
         self.portal.email_from_address = "mail@plone.test"
         
         # run method
@@ -222,7 +210,7 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
         # test email headers
         self.failUnless('To: %s' %test_data['email'] in msg)
         self.failUnless('From: %s' %self.portal.email_from_address in msg)
-        self.failUnless('Subject: =?utf-8?q?Your_click2sell_Integration_Site_login_credentials' in msg)
+        self.failUnless('Subject: =?utf-8?q?Your_Click2Sell_Integration_Site_login_credentials' in msg)
         
         # test email body text
         self.failUnless('Hello %s,' %test_data['fullname'] in msg)
@@ -235,5 +223,5 @@ class Testclick2sell(click2sellIntegrationTestCase, MockMailHostTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Testclick2sell))
+    suite.addTest(unittest.makeSuite(TestClick2Sell))
     return suite

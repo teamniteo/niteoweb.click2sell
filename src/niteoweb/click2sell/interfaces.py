@@ -23,15 +23,6 @@ class IClick2SellSettings(Interface):
 class Click2SellError(Exception):
     """Exception class for niteoweb.click2sell project"""
 
-class POSTVerificationFailedError(Click2SellError):
-    """Exception that is raised when we cannot verify a POST from click2sell."""
-    
-class MemberCreationFailedError(Click2SellError):
-    """Exception that is raised when there is a problem with creating a new member."""
-    
-class MemberUpdateFailedError(Click2SellError):
-    """Exception that is raised when there is a problem with updating member's fields."""
-    
 # events
 class IClick2SellEvent(Interface):
     """Base interface for niteoweb.click2sell events."""

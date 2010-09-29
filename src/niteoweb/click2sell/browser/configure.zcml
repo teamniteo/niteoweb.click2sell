@@ -8,7 +8,7 @@
     <browser:page
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         name="click2sell"
-        class=".click2sell.click2sellView"
+        class=".click2sell.Click2SellView"
         permission="zope2.View"
         />
 
@@ -16,7 +16,7 @@
     <browser:page
         for="Products.CMFPlone.Portal.PloneSite"
         name="configure-click2sell"
-        class=".configure_click2sell.Configureclick2sellForm"
+        class=".configure_click2sell.ConfigureClick2SellForm"
         permission="cmf.ManagePortal"
         />
 

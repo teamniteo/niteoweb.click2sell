@@ -8,9 +8,9 @@ import unittest
 
 from Products.CMFCore.utils import getToolByName
 
-from niteoweb.click2sell.tests import click2sellIntegrationTestCase
+from niteoweb.click2sell.tests import Click2SellIntegrationTestCase
 
-class TestSetup(click2sellIntegrationTestCase):
+class TestSetup(Click2SellIntegrationTestCase):
     """Test installation of niteoweb.click2sell into Plone."""
         
     def test_disable_registration_for_anonymous(self):

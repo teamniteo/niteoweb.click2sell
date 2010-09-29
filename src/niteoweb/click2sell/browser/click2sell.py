@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 """
-click2sell.py - handle click2sell purchase notifications
+click2sell.py - handle Click2Sell purchase notifications
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 """
 import hashlib
@@ -20,16 +20,15 @@ from Products.CMFCore.utils import getToolByName
 from niteoweb.click2sell.interfaces import IClick2SellSettings, MemberCreatedEvent
 
 
-class click2sellView(BrowserView):
-    """A BrowserView that click2sell calls after a purchase."""
+class Click2SellView(BrowserView):
+    """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
-
         # check for POST request
         if not self.request.form:
             self.request.response.setStatus(400, lock=True)
             return 'No POST request.'
-                
+
         # verify POST request
         settings = getUtility(IClick2SellSettings)
         params = dict(self.request.form)
@@ -41,43 +40,48 @@ class click2sellView(BrowserView):
 
         # parse and handle POST
         data = self._parse_POST(params)
-        self._create_or_update_member(data['username'], data)
+        self.create_or_update_member(data['username'], data)
         return 'POST successfully parsed.'
 
     def _verify_POST(self, params):
-        """Verifies if received POST is a valid click2sell POST request.
+        """Verifies if received POST is a valid ClickBank POST request.
 
-        :param params: POST parameters sent by click2sell Notification Service
+        :param params: POST parameters sent by ClickBank Notification Service
         :type params: dict
+
         """
-        request_data = "%(ccustname)s|%(ccustemail)s|%(ccustcc)s|%(ccuststate)s|%(ctransreceipt)s|%(cproditem)s|%(ctransaction)s|%(ctransaffiliate)s|%(ctranspublisher)s|%(cprodtype)s|%(cprodtitle)s|%(ctranspaymentmethod)s|%(ctransamount)s|%(caffitid)s|%(cvendthru)s|%(secret_key)s" % params
-        return params['cverify'] == hashlib.sha1(request_data).hexdigest()[:8].upper()
+        request_data = "%(secretkey)s_%(acquirer_transaction_id)s" % params
+        return params['checksum'] == hashlib.md5(request_data).hexdigest()[:8].upper()
 
     def _parse_POST(self, params):
-        """Parses POST from click2sell and extracts information we need.
+        """Parses POST from ClickBank and extracts information we need.
 
-        :param params: POST parameters sent by click2sell Notification Service
+        :param params: POST parameters sent by ClickBank Notification Service
         :type params: dict
+
         """
-        return {'username': params['ccustemail'],
-                'email': params['ccustemail'],
-                'fullname': params['ccustname'],
-                'product_id': params['cproditem'],
-                'affiliate': params['ctransaffiliate'],
-                'last_purchase_id': params['ctransreceipt'],
-                'last_purchase_timestamp': DateTime(int(params['ctranstime']))}
-        
-    def _create_or_update_member(self, username, data):
+        return {
+            'username': params['buyer_email'],
+            'email': params['buyer_email'],
+            'fullname': u"%s %s" % (params['buyer_name'], params['buyer_surname']),
+            'product_id': params['product_id'],
+            'affiliate': params['affiliate_username'],
+            'last_purchase_id': params['c2s_transaction_id'],
+            'last_purchase_timestamp': DateTime("%s %s" % (params['purchase_date'], params['purchase_time'])),
+        }
+
+    def create_or_update_member(self, username, data):
         """Creates a new Plone member. In case the member already exists,
         this method simply updates member's fields.
-        
+
         :param username: username of member that is to be created/updated
         :type username: string
 
         :param data: member data of member that is to be created/updated
         :type data: dict
+
         """
-        
+
         registration = getToolByName(self.context, 'portal_registration')
         password = self._generate_password()
 
@@ -94,30 +98,31 @@ class click2sellView(BrowserView):
             member = registration.addMember(username, password, properties=data)
             notify(MemberCreatedEvent(self, username))
             self._email_password(username, password, data)
-        
+
     def _email_password(self, mto, password, data):
         """Send an email with member's password.
-        
+
         :param mto: email receipient
         :type mto: string
-        
+
         :param password: member's login password that is written in the email
         :type string: string
 
         :param data: member data needed to construct the email (fullname, ...)
         :type data: dict
+
         """
 
         portal_title = self.context.title
-        
+
         # email from address
         envelope_from = self.context.email_from_address
-        
+
         # email subject
-        subject = u"Your %s login credentials" %portal_title
+        subject = u"Your %s login credentials" % portal_title
 
         # email body text                        
-        options = dict( 
+        options = dict(
                         fullname = data['fullname'],
                         username = data['username'],
                         password = password,
@@ -126,22 +131,23 @@ class click2sellView(BrowserView):
                         portal_title = portal_title,
                        )
         body = ViewPageTemplateFile("email.pt")(self, **options)
-        
+
         # send email
         mailhost = getToolByName(self.context, 'MailHost')
         mailhost.send(body, mto=mto, mfrom=envelope_from, subject=subject, charset='utf-8')
-        
+
     def _generate_password(self, length=8, include=string.letters + string.digits):
         """Generate random password in base64.
 
         :param include: set of characters to choose from
         :type include: string
-        
+
         :param length: number of characters to generate
         :type length: integer
-        
+
         :returns: a random password
         :rtype: string
+
         """
         random.seed()
         return ''.join(random.sample(include, length))
