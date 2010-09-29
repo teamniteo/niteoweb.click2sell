@@ -13,7 +13,7 @@ from niteoweb.click2sell import click2sellMessageFactory
 _ = click2sellMessageFactory
 
 # control panel schema
-class Iclick2sellSettings(Interface):
+class IClick2SellSettings(Interface):
     """This interface defines fields for click2sell plone_control_panel configlet."""
 
     secret_key = schema.Password(title=_(u"click2sell Secret Key"),
@@ -33,10 +33,10 @@ class MemberUpdateFailedError(click2sellError):
     """Exception that is raised when there is a problem with updating member's fields."""
     
 # events
-class Iclick2sellEvent(Interface):
+class IClick2SellEvent(Interface):
     """Base interface for niteoweb.click2sell events."""
 
-class IMemberCreatedEvent(Iclick2sellEvent):
+class IMemberCreatedEvent(IClick2SellEvent):
     """Interface for MemberCreatedEvent."""
     context = Attribute("A member was created by @@click2sell.")
 

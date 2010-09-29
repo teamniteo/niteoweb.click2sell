@@ -1,45 +1,6 @@
 Changelog
 =========
 
-0.6 (unreleased)
-----------------
-
-- Nothing changed yet.
-
-
-0.5 (2010-08-18)
-----------------
-
-    - Emit MemberCreatedEvent when @@click2sell view creates a new member. [zupo]
-
-
-0.4 (2010-07-20)
-----------------
-
-    - Added parameters and return information to docstrings. [zupo]
-
-    - Login credentials email body text is now templated. [zupo]
-
-
-0.3 (2010-07-18)
-----------------
-
-    - Big refactoring and cleanup. [zupo]
-    
-    - Loads of tests. [zupo]
-
-
-0.2 (2010-07-16)
-----------------
-
-    - Use email as username. [zupo]
-    
-    - Added click2sell properties to member data. [zupo]
-
-    - Added @@click2sell BrowserView. [iElectric]
-    
-    - Added Plone Control Panel configlet. [zupo]
-
 
 0.1 (2010-07-15)
 ----------------

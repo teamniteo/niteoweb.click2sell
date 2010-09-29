@@ -23,7 +23,7 @@
     <adapter
         factory=".configure_click2sell.configure_click2sell"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="niteoweb.click2sell.interfaces.Iclick2sellSettings"
+        provides="niteoweb.click2sell.interfaces.IClick2SellSettings"
         /> 
          
     <browser:resource

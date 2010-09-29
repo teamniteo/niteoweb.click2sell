@@ -7,8 +7,8 @@ These tests are adapted from that in plone.app.controlpanel
 First some initial setup code:
 
     >>> from zope.component import getUtility
-    >>> from niteoweb.click2sell.interfaces import Iclick2sellSettings
-    >>> configuration = getUtility(Iclick2sellSettings)
+    >>> from niteoweb.click2sell.interfaces import IClick2SellSettings
+    >>> configuration = getUtility(IClick2SellSettings)
     >>> self.login_with_browser(self.browser)
 
     >>> configuration.secret_key = 'secret'

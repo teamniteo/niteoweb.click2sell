@@ -27,20 +27,24 @@ How it works
 ============
 
 #. Visitor comes to yoursite.com/order (or similar) and clicks Order link.
-#. Visitor is sent to click2sell's order form (on click2sell.com), 
+#. Visitor is sent to click2sell's order form (on click2sell.eu), 
     where he enters his personal information and performs payment.
 #. click2sell calls-back a special view on your plone site (/@@click2sell),
     which reads POST data from click2sell, verifies it with your *Secret Key*
     and creates a new member.
 #. The following information is stored in member data for later use:
+
     *product_id*
-        click2sell's Product ID of the purchased item.
+        Click2Sell's Product ID of the purchased item.
+
+    *product_name*
+        Click2Sell's Product Name of the purchased item.
         
     *affiliate*
         Affiliate who referred the buyer.
         
     *last_purchase_id*
-        click2sell receipt ID of the last purchase. This field gets updated on
+        Click2Sell receipt ID of the last purchase. This field gets updated on
         every recurring payment.
 
     *last_purchase_timestamp*
@@ -84,20 +88,12 @@ Configuration
 click2sell
 ---------
 
-Go to click2sell and create a Vendor account. Add a test Product of type *Membership*.
-Then set the following:
+Go to click2sell.eu and use For Merchant -> Add Product to add a new Product.
 
-Secret Key
-    Choose a strong password here.
-    
-Thank your page
-    Enter a url for your *Thank You* page, normally *http://yoursite.com/thank-you*.
-    
-Hoplink destination url.
-    Enter a url to a site with an order link, normally *http://yoursite.com/order*.
-
-Test credit card.
-    Create *Test Credit Card* so you can do test buys.
+Then click on your new Product and select API Settings. For 'URL to notify' set
+*http://yoursite.com/@@click2sell* and also choose a *Secret Key*. Check 'Enable/Disable
+remote server's notification' to enable server notifications and consequently
+member auto-registering.
 
 
 Plone
@@ -108,24 +104,16 @@ Plone
     Secret Key
        Paste the Secret Key you defined above.
 
-#. Create a Page *Order*. Insert the following markup, replacing capitalized strings::
-
-    <a href="http://PRODUCT_ID.VENDOR_ID.pay.click2sell.net">Order a subscription to this site!</a>
-
-#. Create a Page *Thank You*. Insert the following text::
-
-    Thank you for your order!
-    Your credit card or bank statement will show a charge by click2sell or CLKBANK*COM.
-    If you have any questions let us know on info@yoursite.com"
-
-
 Test it
 =======
 
-Fire up your browser and point it to your *Order* page. Click on *Order a subscription to this site!*,
-fill in your Test Credit Card info with your personal email and purchase the subscription.
-Confirm by logging-in to click2sell and checking to see if there were any purchases. You should also
-receive an email with username and password for accessing your site.
+You are now ready to do a test buy! Go back to 'My Products' and click 'Test BUY'. Before
+you finish the transaction, you need to set up your Plone site to receive Click2Sell 
+server notifications. Read below.
+
+Confirm by logging-in to click2sell and checking to see if there were any purchases. 
+Also check if your receive an email with username and password for accessing your site and
+login with them.
     
 
 Known issues
@@ -196,7 +184,7 @@ Utilities
 .. automodule:: niteoweb.click2sell.interfaces
     :members:
 
-    .. autointerface:: niteoweb.click2sell.interfaces.Iclick2sellSettings
+    .. autointerface:: niteoweb.click2sell.interfaces.IClick2SellSettings
 
 
 Tests
@@ -222,5 +210,5 @@ Indices and tables
 * :ref:`search`
 
 
-.. _click2sell: http://www.click2sell.com/
+.. _click2sell: http://www.click2sell.eu/
 .. _Plone: http://plone.org/

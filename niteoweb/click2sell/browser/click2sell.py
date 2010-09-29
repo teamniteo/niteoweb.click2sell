@@ -17,7 +17,7 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
-from niteoweb.click2sell.interfaces import Iclick2sellSettings, MemberCreatedEvent
+from niteoweb.click2sell.interfaces import IClick2SellSettings, MemberCreatedEvent
 
 
 class click2sellView(BrowserView):
@@ -31,7 +31,7 @@ class click2sellView(BrowserView):
             return 'No POST request.'
                 
         # verify POST request
-        settings = getUtility(Iclick2sellSettings)
+        settings = getUtility(IClick2SellSettings)
         params = dict(self.request.form)
         params['secret_key'] = settings.secret_key
 
