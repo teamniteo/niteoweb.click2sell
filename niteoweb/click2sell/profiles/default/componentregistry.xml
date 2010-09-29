@@ -4,7 +4,7 @@
 
         <utility
             interface="niteoweb.click2sell.interfaces.IClick2SellSettings"
-            factory="niteoweb.click2sell.click2sell_settings.click2sellSettings"
+            factory="niteoweb.click2sell.click2sell_settings.Click2SellSettings"
             />
 
     </utilities>

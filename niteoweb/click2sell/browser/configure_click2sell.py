@@ -9,11 +9,11 @@ from zope.formlib import form
 
 from plone.app.controlpanel.form import ControlPanelForm
 
-from niteoweb.click2sell import click2sellMessageFactory
+from niteoweb.click2sell import Click2SellMessageFactory
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 
 
-_ = click2sellMessageFactory
+_ = Click2SellMessageFactory
 
 def configure_click2sell(context):
     return getUtility(IClick2SellSettings)

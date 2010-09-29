@@ -7,10 +7,10 @@ interfaces.py - where all interfaces, events and exceptions live
 from zope.interface import Interface, Attribute, implements
 from zope import schema
 
-from niteoweb.click2sell import click2sellMessageFactory
+from niteoweb.click2sell import Click2SellMessageFactory
 
 
-_ = click2sellMessageFactory
+_ = Click2SellMessageFactory
 
 # control panel schema
 class IClick2SellSettings(Interface):
@@ -20,16 +20,16 @@ class IClick2SellSettings(Interface):
                                   required=True) 
 
 # exceptions
-class click2sellError(Exception):
+class Click2SellError(Exception):
     """Exception class for niteoweb.click2sell project"""
 
-class POSTVerificationFailedError(click2sellError):
+class POSTVerificationFailedError(Click2SellError):
     """Exception that is raised when we cannot verify a POST from click2sell."""
     
-class MemberCreationFailedError(click2sellError):
+class MemberCreationFailedError(Click2SellError):
     """Exception that is raised when there is a problem with creating a new member."""
     
-class MemberUpdateFailedError(click2sellError):
+class MemberUpdateFailedError(Click2SellError):
     """Exception that is raised when there is a problem with updating member's fields."""
     
 # events

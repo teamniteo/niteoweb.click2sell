@@ -24,6 +24,7 @@ class TestSetup(click2sellIntegrationTestCase):
         """Test if click2sell-specific fields were added to memberdata."""
         properties = self.portal.portal_memberdata.propertyIds()
         self.failUnless('product_id' in properties)
+        self.failUnless('product_name' in properties)
         self.failUnless('affiliate' in properties)
         self.failUnless('last_purchase_id' in properties)        
         self.failUnless('last_purchase_timestamp' in properties)

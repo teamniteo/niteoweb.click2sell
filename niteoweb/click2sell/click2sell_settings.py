@@ -10,7 +10,7 @@ from zope.interface import implements
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 
 
-class click2sellSettings(Persistent):
+class Click2SellSettings(Persistent):
     """A ZCA local utility for storing information from click2sell configuration configlet."""
     implements(IClick2SellSettings)
 
