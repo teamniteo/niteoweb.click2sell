@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<componentregistry>
+    <utilities>  
+
+        <utility
+            interface="niteoweb.click2sell.interfaces.IClick2SellSettings"
+            factory="niteoweb.click2sell.click2sell_settings.Click2SellSettings"
+            />
+
+    </utilities>
+</componentregistry>
