@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<rolemap>
+    <permissions>
+        
+        <!-- Prevent anonymous user to register -->
+        <permission name="Add portal member" acquire="False">
+            <role name="Manager"/>
+            <role name="Owner"/>
+        </permission>
+        
+    </permissions>
+</rolemap>

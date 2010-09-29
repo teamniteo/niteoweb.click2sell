@@ -1,0 +1,25 @@
+<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="plone" 
+     tal:omit-tag=""
+     tal:define="portal context/@@plone_portal_state/portal;
+                 charset portal/email_charset|string:utf-8;
+                 dummy python:request.RESPONSE.setHeader('Content-Type', 'text/plain;;charset=%s' % charset);">
+    
+Hello <span tal:omit-tag="" tal:content="options/fullname | nothing" />,
+    
+thank you for your order!
+
+Here are your login details for the membership area:
+u: <span tal:omit-tag="" tal:content="options/username | nothing" />
+p: <span tal:omit-tag="" tal:content="options/password | nothing" />     
+
+You can now login at <span tal:omit-tag="" tal:content="options/login_url | nothing" />
+
+If you have any questions let us know on <span tal:omit-tag="" tal:content="options/email_from | nothing" />
+
+
+Best wishes,
+<span tal:omit-tag="" tal:content="options/portal_title | nothing" /> Team
+</div>

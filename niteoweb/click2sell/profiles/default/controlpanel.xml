@@ -1,0 +1,14 @@
+<object name="portal_controlpanel" meta_type="Plone Control Panel Tool">
+
+    <configlet title="Configure click2sell"
+               action_id="click2sellConfiguration"
+               appId="click2sellConfiguration"
+               category="Products" 
+               condition_expr=""
+               url_expr="string:${portal_url}/@@configure-click2sell"
+               icon_expr="string:$portal_url/++resource++click2sell_icon.png"
+               visible="True">
+        <permission>Manage Portal</permission>
+    </configlet>
+
+</object>
