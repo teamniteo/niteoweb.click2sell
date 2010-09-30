@@ -100,6 +100,13 @@ class Click2SellView(BrowserView):
             notify(MemberCreatedEvent(self, username))
             self._email_password(username, password, data)
 
+        # create group and add member to it
+        groups = getToolByName(member, 'portal_groups')
+        group_name = "click2sell"
+        if group_name not in groups.getGroupIds():
+            groups.addGroup(group_name)
+        groups.addPrincipalToGroup(username, group_name)
+
     def _email_password(self, mto, password, data):
         """Send an email with member's password.
 

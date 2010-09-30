@@ -161,7 +161,10 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
         self.failUnless('Subject: =?utf-8?q?Your_Plone_site_login_credentials' in msg)
         self.failUnless('u: %s' %test_data['username'] in msg)
         self.failUnless('p: %s' %test_data['password'] in msg)
-        
+
+        # test that we created group
+        self.assertTrue('click2sell' in self.portal.portal_groups.getGroupIds())
+        self.assertTrue('click2sell' in member.getGroups())
 
     def test_update_member(self):
         """Test updating an existing member with POST parameters."""
