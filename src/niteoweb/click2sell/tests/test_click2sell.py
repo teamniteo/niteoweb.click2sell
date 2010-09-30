@@ -96,6 +96,7 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
                     buyer_email = 'email',
                     c2s_transaction_id = 'last_purchase_id',
                     product_id = 'product_id',
+                    product_name = 'product_name',
                     affiliate_username= 'affiliate',
                     purchase_date = '2010-01-01',
                     purchase_time = '00:00:00',
@@ -106,6 +107,7 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
                         username = 'email',
                         email = 'email',
                         product_id = 'product_id',
+                        product_name = 'product_name',
                         affiliate = 'affiliate',
                         last_purchase_id = 'last_purchase_id',
                         last_purchase_timestamp = DateTime('2010-01-01 00:00:00'),
@@ -123,6 +125,7 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
                     email = 'john@smith.name',
                     fullname = 'John Smith',
                     product_id = '1',
+                    product_name = 'product_name',
                     affiliate = 'Jane Affiliate',
                     last_purchase_id = 'invoice_1',
                     last_purchase_timestamp = DateTime('2010/01/01'),
@@ -146,6 +149,7 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
         self.assertEqual(member.getProperty('email'), test_data['email'])
         self.assertEqual(member.getProperty('fullname'), test_data['fullname'])
         self.assertEqual(member.getProperty('product_id'), test_data['product_id'])
+        self.assertEqual(member.getProperty('product_name'), test_data['product_name'])
         self.assertEqual(member.getProperty('affiliate'), test_data['affiliate'])
         self.assertEqual(member.getProperty('last_purchase_id'), test_data['last_purchase_id'])
         self.assertEqual(member.getProperty('last_purchase_timestamp'), test_data['last_purchase_timestamp'])

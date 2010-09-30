@@ -44,9 +44,9 @@ class Click2SellView(BrowserView):
         return 'POST successfully parsed.'
 
     def _verify_POST(self, params):
-        """Verifies if received POST is a valid ClickBank POST request.
+        """Verifies if received POST is a valid Click2Sell POST request.
 
-        :param params: POST parameters sent by ClickBank Notification Service
+        :param params: POST parameters sent by Click2Sell Notification Service
         :type params: dict
 
         """
@@ -54,9 +54,9 @@ class Click2SellView(BrowserView):
         return params['checksum'] == hashlib.md5(request_data).hexdigest()[:8].upper()
 
     def _parse_POST(self, params):
-        """Parses POST from ClickBank and extracts information we need.
+        """Parses POST from Click2Sell and extracts information we need.
 
-        :param params: POST parameters sent by ClickBank Notification Service
+        :param params: POST parameters sent by Click2Sell Notification Service
         :type params: dict
 
         """
@@ -65,6 +65,7 @@ class Click2SellView(BrowserView):
             'email': params['buyer_email'],
             'fullname': u"%s %s" % (params['buyer_name'], params['buyer_surname']),
             'product_id': params['product_id'],
+            'product_name': params['product_name'],
             'affiliate': params['affiliate_username'],
             'last_purchase_id': params['c2s_transaction_id'],
             'last_purchase_timestamp': DateTime("%s %s" % (params['purchase_date'], params['purchase_time'])),
