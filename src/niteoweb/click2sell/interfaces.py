@@ -16,7 +16,7 @@ _ = Click2SellMessageFactory
 class IClick2SellSettings(Interface):
     """This interface defines fields for click2sell plone_control_panel configlet."""
 
-    secret_key = schema.Password(title=_(u"click2sell Secret Key"),
+    secretkey = schema.Password(title=_(u"click2sell Secret Key"),
                                   required=True) 
 
 # exceptions

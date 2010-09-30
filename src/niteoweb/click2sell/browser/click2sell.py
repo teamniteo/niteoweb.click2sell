@@ -24,6 +24,7 @@ class Click2SellView(BrowserView):
     """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
+       
         # check for POST request
         if not self.request.form:
             self.request.response.setStatus(400, lock=True)
@@ -32,7 +33,7 @@ class Click2SellView(BrowserView):
         # verify POST request
         settings = getUtility(IClick2SellSettings)
         params = dict(self.request.form)
-        params['secret_key'] = settings.secret_key
+        params['secretkey'] = settings.secretkey
 
         if not self._verify_POST(params):
             self.request.response.setStatus(400, lock=True)
@@ -51,7 +52,7 @@ class Click2SellView(BrowserView):
 
         """
         request_data = "%(secretkey)s_%(acquirer_transaction_id)s" % params
-        return params['checksum'] == hashlib.md5(request_data).hexdigest()[:8].upper()
+        return params['checksum'] == hashlib.md5(request_data).hexdigest().upper()
 
     def _parse_POST(self, params):
         """Parses POST from Click2Sell and extracts information we need.

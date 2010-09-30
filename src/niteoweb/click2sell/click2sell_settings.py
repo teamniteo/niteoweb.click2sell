@@ -14,4 +14,4 @@ class Click2SellSettings(Persistent):
     """A ZCA local utility for storing information from click2sell configuration configlet."""
     implements(IClick2SellSettings)
 
-    secret_key = ''
+    secretkey = ''
