@@ -82,9 +82,8 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
         params = dict(
                     secretkey= 'secret',
                     acquirer_transaction_id='123',
-                    checksum='B457E943',
+                    checksum='B457E9433F98EF22AA9DD9BA4A5E2B16',
                     )
-
         verified = self.view._verify_POST(params)
         self.failUnless(verified)
 
