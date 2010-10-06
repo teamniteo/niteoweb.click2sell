@@ -51,7 +51,7 @@ How it works
         Exact timestamp of the last purchase. This field gets updated on
         every recurring payment.    
     
-#. Upon creating a new member, Plone send an email with login password.
+#. Upon creating a new member, Plone sends an email with login password.
 #. An IMemberCreateEvent is emitted upon creating a new member.
 #. New member can now login and use the site.
 
@@ -157,7 +157,7 @@ Open up a console and run the following::
     
     # build sphinx docs and upload them to packages.python.org
     $ bin/sphinxbuilder
-    $ python setup.py upload_docs
+    $ bin/python setup.py upload_docs
 
 
 API
@@ -168,7 +168,7 @@ Views & Controllers
 
 .. automodule:: niteoweb.click2sell.browser.click2sell
 
-    .. autoclass:: niteoweb.click2sell.browser.click2sell.click2sellView
+    .. autoclass:: niteoweb.click2sell.browser.click2sell.Click2SellView
         :members: __call__, _verify_POST, _parse_POST, _create_or_update_member, _email_password, _generate_password
 
 .. automodule:: niteoweb.click2sell.browser.configure_click2sell
