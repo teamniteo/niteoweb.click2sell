@@ -85,13 +85,14 @@ class Click2SellView(BrowserView):
         """
 
         registration = getToolByName(self.context, 'portal_registration')
+        membership = getToolByName(self.context, 'portal_membership')
         password = self._generate_password()
 
         # update or create member
-        member = self.context.acl_users.getUserById(username)
+        member = membership.getMemberById(username)
         if member:
             # update existing member
-            member.setProperties(mapping={
+            member.setMemberProperties(mapping={
                 'last_purchase_id': data['last_purchase_id'],
                 'last_purchase_timestamp': data['last_purchase_timestamp'],
             })

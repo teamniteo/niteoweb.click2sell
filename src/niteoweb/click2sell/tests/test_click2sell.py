@@ -138,13 +138,14 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
         mock_view = mocker.patch(self.view)
         mock_view._generate_password(ARGS, KWARGS)
         mocker.result(test_data['password'])
+        mocker.count(2)
         mocker.replay()
         
         # run method
         self.view.create_or_update_member(test_data['username'], test_data)
         
         # test member
-        member = self.portal.acl_users.getUserById(test_data['username'])
+        member = self.portal.portal_membership.getMemberById(test_data['username'])
         self.assertEqual(member.getProperty('email'), test_data['email'])
         self.assertEqual(member.getProperty('fullname'), test_data['fullname'])
         self.assertEqual(member.getProperty('product_id'), test_data['product_id'])
@@ -164,6 +165,20 @@ class TestClick2Sell(Click2SellIntegrationTestCase, MockMailHostTestCase):
         # test that we created group
         self.assertTrue('click2sell' in self.portal.portal_groups.getGroupIds())
         self.assertTrue('click2sell' in member.getGroups())
+
+        # now test that if a request for same member is posted this member gets updated
+        test_data['username'] = 'john@smith.name'
+        test_data['last_purchase_id'] = 'invoice_2'
+        test_data['last_purchase_timestamp'] = DateTime('2010/02/02')
+
+        # run method
+        self.view.create_or_update_member(test_data['username'], test_data)
+
+        # test that product_id was updated member
+        member = self.portal.portal_membership.getMemberById(test_data['username'])
+        self.assertEqual(member.getProperty('last_purchase_id'), 'invoice_2')
+        self.assertEqual(member.getProperty('last_purchase_timestamp'), DateTime('2010/02/02'))
+
 
     def test_update_member(self):
         """Test updating an existing member with POST parameters."""
