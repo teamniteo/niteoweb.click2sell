@@ -83,11 +83,8 @@ notifications and consequently member auto-registering.
 Plone
 -----
 
-Go to ``Site Setup`` -> ``click2sell`` control panel form and configure the
-following fields:
-
-    Secret Key
-       Paste the `Secret Key` you defined above.
+Go to ``Site Setup`` -> ``click2sell`` control panel form and configure
+the ``Secret Key`` field by pasting in the `Secret Key` you defined above.
 
 Test it
 =======
