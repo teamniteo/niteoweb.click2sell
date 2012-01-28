@@ -1,0 +1,9 @@
+var
+parts
+lib
+include
+bin
+.mr.developer.cfg
+.installed.cfg
+.DS_Store
+develop-eggs

@@ -1,14 +1,15 @@
-import unittest
-import doctest
+# -*- coding: utf-8 -*-
+"""Doctest runner."""
 
+from niteoweb.click2sell.tests.base import Click2SellControlPanelTestCase
 from Testing import ZopeTestCase as ztc
-
-from niteoweb.click2sell.tests import Click2SellControlPanelTestCase
+import doctest
+import unittest
 
 
 def test_suite():
     return unittest.TestSuite([
-            
+
         # Test the Click2Sell control panel
         ztc.ZopeDocFileSuite(
             'tests/control_panel.txt', package='niteoweb.click2sell',

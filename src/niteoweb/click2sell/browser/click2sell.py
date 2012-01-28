@@ -1,30 +1,25 @@
-
 # -*- coding: utf-8 -*-
-"""
-click2sell.py - handle Click2Sell purchase notifications
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-"""
-import hashlib
-import random
-import string
+"""Handle Click2Sell purchase notifications."""
 
 from DateTime import DateTime
-
+from niteoweb.click2sell.interfaces import IClick2SellSettings
+from niteoweb.click2sell.interfaces import MemberCreatedEvent
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.event import notify
 
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFCore.utils import getToolByName
-
-from niteoweb.click2sell.interfaces import IClick2SellSettings, MemberCreatedEvent
+import hashlib
+import random
+import string
 
 
 class Click2SellView(BrowserView):
     """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
-       
+
         # check for POST request
         if not self.request.form:
             self.request.response.setStatus(400, lock=True)
@@ -131,15 +126,15 @@ class Click2SellView(BrowserView):
         # email subject
         subject = u"Your %s login credentials" % portal_title
 
-        # email body text                        
+        # email body text
         options = dict(
-                        fullname = data['fullname'],
-                        username = data['username'],
-                        password = password,
-                        login_url = self.context.absolute_url() + '/login_form',
-                        email_from = envelope_from,
-                        portal_title = portal_title,
-                       )
+            fullname=data['fullname'],
+            username=data['username'],
+            password=password,
+            login_url=self.context.absolute_url() + '/login_form',
+            email_from=envelope_from,
+            portal_title=portal_title,
+       )
         body = ViewPageTemplateFile("email.pt")(self, **options)
 
         # send email

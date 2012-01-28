@@ -2,17 +2,19 @@ Changelog
 =========
 
 
-0.2.3 (unreleased)
-------------------
+0.3 (unreleased)
+----------------
 
-- Nothing changed yet.
+- Updated the package with latest best practices, added support for
+  `plone.app.testing`, moved to GitHub.
+  [zupo]
 
 
 0.2.2 (2011-08-16)
 ------------------
 
 - Support for Plone 4.1.
-  [zupo]  
+  [zupo]
 
 
 0.2.1 (2010-10-06)
@@ -20,7 +22,7 @@ Changelog
 
 - Fixed updating an already existing member.
   [zupo]
-  
+
 - Added Uninstall profile.
   [zupo]
 
