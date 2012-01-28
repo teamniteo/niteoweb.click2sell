@@ -1,7 +1,6 @@
 Changelog
 =========
 
-
 0.3 (unreleased)
 ----------------
 
@@ -39,3 +38,4 @@ Changelog
 
 - Initial release.
   [zupo]
+
