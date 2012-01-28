@@ -53,7 +53,7 @@ Demo
 ====
 
 You can see this product in action at
-`BigContentSearch <http://bigcontentsearch.com/order>`_.
+`BigContentSearch <http://bigcontentsearch.com/>`_.
 
 
 Installation
@@ -83,7 +83,7 @@ notifications and consequently member auto-registering.
 Plone
 -----
 
-#. Go to ``Site Setup`` -> ``click2sell`` control panel form and configure the
+Go to ``Site Setup`` -> ``click2sell`` control panel form and configure the
 following fields:
 
     Secret Key
@@ -106,9 +106,9 @@ Known issues
 
 The following known issues exist:
 
-    * If members stop paying for monthly or yearly subscriptions, you have to
-    manually delete them from your Plone site.
+* If members stop paying for monthly or yearly subscriptions, you have to
+  manually delete them from your Plone site.
 
-    * The same as above goes for any chargebacks or refunds. You have to manage
-    them manually.
+* The same as above goes for any chargebacks or refunds. You have to manage
+  them manually.
 
