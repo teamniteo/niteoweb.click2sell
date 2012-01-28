@@ -7,3 +7,5 @@ bin
 .installed.cfg
 .DS_Store
 develop-eggs
+docs/doctrees
+docs/html
