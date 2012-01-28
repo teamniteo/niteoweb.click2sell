@@ -22,22 +22,22 @@ How it works
    ``Secret Key`` and creates a new member.
 #. The following information is stored in member data for later use:
 
-  ``product_id``
-      Click2Sell's `Product ID` of the purchased item.
+    ``product_id``
+        Click2Sell's `Product ID` of the purchased item.
 
-  ``product_name``
-      Click2Sell's `Product Name` of the purchased item.
+    ``product_name``
+        Click2Sell's `Product Name` of the purchased item.
 
-  ``affiliate``
-      Affiliate who referred the buyer.
+    ``affiliate``
+        Affiliate who referred the buyer.
 
-  ``last_purchase_id``
-      Click2Sell's `Receipt ID` of the last purchase. This field gets updated
-      on every recurring payment.
+    ``last_purchase_id``
+        Click2Sell's `Receipt ID` of the last purchase. This field gets updated
+        on every recurring payment.
 
-  ``last_purchase_timestamp``
-      Exact timestamp of the last purchase. This field gets updated on every
-      recurring payment.
+    ``last_purchase_timestamp``
+        Exact timestamp of the last purchase. This field gets updated on every
+        recurring payment.
 
 #. Upon creating a new member, Plone sends an email with login password.
 #. An ``IMemberCreateEvent`` is emitted upon creating a new member.
