@@ -1,2 +1,1 @@
-Documentation at http://packages.python.org/niteoweb.click2sell/.
-Source at http://svn.plone.org/svn/collective/niteoweb.click2sell/.
+Documentation at https://github.com/niteoweb/niteoweb.click2sell/blob/master/docs/README.rst.
