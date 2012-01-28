@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3 (unreleased)
+0.3 (2012-01-28)
 ----------------
 
 - Updated the package with latest best practices, added support for
