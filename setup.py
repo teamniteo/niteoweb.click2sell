@@ -43,6 +43,7 @@ setup(name='niteoweb.click2sell',
           'test': [
               'mock',
               'plone.app.testing',
+              'Products.PloneTestCase',
               'unittest2',
           ]
       },
