@@ -36,6 +36,7 @@ setup(name='niteoweb.click2sell',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.CMFPlone',
       ],
       extras_require={
           # list libs needed for unittesting this project
