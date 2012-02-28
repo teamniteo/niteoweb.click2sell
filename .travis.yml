@@ -3,8 +3,8 @@ python:
   - 2.6
 install:
   - sudo apt-get install -y build-essential
-  - python bootstrap.py -c development.cfg
-  - bin/buildout -c development.cfg -vv
+  - python bootstrap.py -c travis.cfg
+  - bin/buildout -c travis.cfg -v
 script: bin/test -s niteoweb.click2sell
 
 notifications:
