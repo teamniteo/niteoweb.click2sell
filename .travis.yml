@@ -4,7 +4,7 @@ python:
 install:
   - sudo apt-get install -y build-essential
   - python bootstrap.py -c development.cfg
-  - bin/buildout -c development.cfg -vvvv
+  - bin/buildout -c development.cfg -vv
 script: bin/test -s niteoweb.click2sell
 
 notifications:
