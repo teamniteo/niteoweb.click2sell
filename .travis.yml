@@ -6,7 +6,11 @@ install:
   - sudo apt-get install -y python-profiler build-essential
   - python bootstrap.py -c travis.cfg
   - bin/buildout -c travis.cfg
-script: bin/test -s niteoweb.click2sell
+script:
+  - bin/test -s niteoweb.click2sell
+  - bin/pep8 --ignore=E501 src/niteoweb/click2sell
+  - bin/pyflakes src/niteoweb/click2sell
+  - for pt in `find src/niteoweb/click2sell -name "*.pt"` ; do bin/zptlint $pt; done
 
 notifications:
   irc:
