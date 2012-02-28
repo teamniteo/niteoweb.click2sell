@@ -10,3 +10,5 @@ script: bin/test -s niteoweb.click2sell
 notifications:
   irc:
     - "irc.freenode.org#niteoweb"
+  email:
+    - maintenance@niteoweb.com
