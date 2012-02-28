@@ -1,0 +1,12 @@
+language: python
+python:
+  - 2.6
+install:
+  - sudo apt-get install -y build-essentials
+  - python bootstrap.py -c development.cfg
+  - bin/buildout -c development.cfg
+script: bin/test -s niteoweb.click2sell
+
+notifications:
+  irc:
+    - "irc.freenode.org#niteoweb"
