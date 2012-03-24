@@ -8,7 +8,7 @@ memberships on your site.
 
 * `Source code @ GitHub <https://github.com/niteoweb/niteoweb.click2sell>`_
 * `Releases @ PyPI <http://pypi.python.org/pypi/niteoweb.click2sell>`_
-* `Sphinx docs @ ReadTheDocs <http://readthedocs.org/docs/niteowebclick2sell>`_
+* `Documentation @ ReadTheDocs <http://readthedocs.org/docs/niteowebclick2sell>`_
 
 
 How it works
