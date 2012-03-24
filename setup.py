@@ -16,7 +16,7 @@ version = read('src', 'niteoweb', 'click2sell', 'version.txt').strip()
 setup(name='niteoweb.click2sell',
       version=version,
       description="Integrates click2sell digital products retailer system with Plone for paid memberships.",
-      long_description=read('docs', 'README.rst') +
+      long_description=read('README.rst') +
                        read('docs', 'HISTORY.rst') +
                        read('docs', 'LICENSE.rst'),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers

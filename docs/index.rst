@@ -1,4 +1,4 @@
-.. include:: README.rst
+.. include:: ../README.rst
 .. include:: HISTORY.rst
 .. include:: LICENSE.rst
 
