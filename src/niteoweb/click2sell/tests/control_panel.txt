@@ -10,8 +10,11 @@ First some initial setup code.
     >>> browser = Browser(self.layer['app'])
 
     >>> from zope.component import getUtility
+    >>> from plone.registry.interfaces import IRegistry
+    >>> registry = getUtility(IRegistry)
+
     >>> from niteoweb.click2sell.interfaces import IClick2SellSettings
-    >>> configuration = getUtility(IClick2SellSettings)
+    >>> settings = registry.forInterface(IClick2SellSettings)
 
 Login as test user.
 
@@ -22,53 +25,53 @@ Login as test user.
 
 Set Click2Sell SecretKey.
 
-    >>> configuration.secretkey = 'secret'
+    >>> settings.secretkey = u'secret'
 
 
 Viewing the click2sell control panel
 -----------------------------------------------
 
-    >>> browser.open('http://nohost/plone/@@configure-click2sell')
+    >>> browser.open('http://nohost/plone/@@click2sell-settings')
     >>> browser.url
-    'http://nohost/plone/@@configure-click2sell'
+    'http://nohost/plone/@@click2sell-settings'
 
 Click the save button without making any changes:
 
-    >>> browser.getControl(name="form.actions.save").click()
-    >>> browser.url.endswith('configure-click2sell')
+    >>> browser.getControl(name="form.buttons.save").click()
+    >>> browser.url.endswith('click2sell-settings')
     True
 
 We should get a status message:
 
-    >>> 'There were errors' in browser.contents
+    >>> 'There were some errors' in browser.contents
     True
     >>> 'Required input is missing' in browser.contents
     True
 
 Now click the cancel button:
 
-    >>> browser.getControl(name="form.actions.cancel").click()
+    >>> browser.getControl(name="form.buttons.cancel").click()
     >>> browser.url.endswith('plone_control_panel')
     True
 
 There should be still no changes:
 
-    >>> 'Changes canceled.' in browser.contents
+    >>> 'Edit cancelled.' in browser.contents
     True
 
 Make some changes
 -----------------
 
-    >>> browser.open('http://nohost/plone/@@configure-click2sell')
-    >>> browser.url.endswith('configure-click2sell')
+    >>> browser.open('http://nohost/plone/@@click2sell-settings')
+    >>> browser.url.endswith('click2sell-settings')
     True
 
-    >>> browser.getControl(name='form.secretkey').value = 'new secret'
+    >>> browser.getControl(name='form.widgets.secretkey').value = 'new secret'
 
 Click the save button:
 
-    >>> browser.getControl(name="form.actions.save").click()
-    >>> browser.url.endswith('configure-click2sell')
+    >>> browser.getControl(name="form.buttons.save").click()
+    >>> browser.url.endswith('plone_control_panel')
     True
 
 We should be informed that something has changed:
@@ -78,5 +81,5 @@ We should be informed that something has changed:
 
 Make sure the changes have been applied correctly to the tool:
 
-    >>> configuration.secretkey
+    >>> settings.secretkey
     u'new secret'

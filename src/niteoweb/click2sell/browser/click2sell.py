@@ -4,6 +4,7 @@
 from DateTime import DateTime
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.interfaces import MemberCreatedEvent
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -26,7 +27,8 @@ class Click2SellView(BrowserView):
             return 'No POST request.'
 
         # verify POST request
-        settings = getUtility(IClick2SellSettings)
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IClick2SellSettings)
         params = dict(self.request.form)
         params['secretkey'] = settings.secretkey
 

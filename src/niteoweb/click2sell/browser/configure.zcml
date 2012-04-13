@@ -1,38 +1,33 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="niteoweb.plr">
-    
-    <!-- This is needed if we want to specify cmf.ManagePortal permission -->
-    <include package="Products.CMFCore" file="permissions.zcml" />
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:plone="http://namespaces.plone.org/plone"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="niteoweb.click2sell">
 
-    <!-- A view that click2sell calls after a purchase -->
-    <browser:page
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        name="click2sell"
-        class=".click2sell.Click2SellView"
-        permission="zope2.View"
-        />
+  <!-- This is needed if we want to specify cmf.ManagePortal permission -->
+  <include package="Products.CMFCore" file="permissions.zcml" />
 
-    <!-- A BrowserView for displaying click2sell control panel -->
-    <browser:page
-        for="Products.CMFPlone.Portal.PloneSite"
-        name="configure-click2sell"
-        class=".configure_click2sell.ConfigureClick2SellForm"
-        permission="cmf.ManagePortal"
-        />
+  <!-- A view that click2sell calls after a purchase -->
+  <browser:page
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    name="click2sell"
+    class=".click2sell.Click2SellView"
+    permission="zope2.View"
+    />
 
-    <adapter
-        factory=".configure_click2sell.configure_click2sell"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="niteoweb.click2sell.interfaces.IClick2SellSettings"
-        /> 
-         
-    <browser:resource
-        name="click2sell_icon.png"
-        image="click2sell_icon.png"
-        />       
-        
+  <!-- Control panel configlet -->
+  <include package="plone.app.registry" />
+  <browser:page
+    name="click2sell-settings"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".controlpanel.Click2SellSettingsControlPanel"
+    permission="cmf.ManagePortal"
+    />
+
+  <browser:resource
+    name="click2sell_icon.png"
+    image="click2sell_icon.png"
+    />
+
 </configure>
 

@@ -1,0 +1,14 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:gs="http://namespaces.zope.org/genericsetup"
+  i18n_domain="niteoweb.click2sell">
+
+  <gs:upgradeStep
+    title="0-0400"
+    description="Only use this when upgrading from 0.3 to 0.4."
+    source="unknown"
+    destination="0400"
+    handler=".upgrade_0_to_0400.upgrade"
+    profile="niteoweb.click2sell:default"/>
+
+</configure>

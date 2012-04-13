@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
 
-from niteoweb.click2sell.interfaces import IClick2SellSettings
+from AccessControl import Unauthorized
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from niteoweb.click2sell.tests.base import IntegrationTestCase
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
-from zope.component import getUtility
-from zope.component.interfaces import ComponentLookupError
+from plone.app.testing import logout
 
 import unittest2 as unittest
 
@@ -44,35 +45,27 @@ class TestInstall(IntegrationTestCase):
         site_properties = self.portal.portal_properties.site_properties
         self.failUnless(site_properties.getProperty('use_email_as_login') == True)
 
-
-class TestUninstall(IntegrationTestCase):
-    """Test un-installation of niteoweb.click2sell from Plone."""
-
-    def setUp(self):
-        """Custom shared utility setup for tests."""
-        self.portal = self.layer['portal']
-        self.installer = getToolByName(self.portal, 'portal_quickinstaller')
-        self.installer.uninstallProducts(products=["niteoweb.click2sell"])
-
-    def test_product_uninstalled(self):
-        """Test if the product was uninstalled."""
-        self.failIf(self.installer.isProductInstalled("niteoweb.click2sell"))
-
-    def test_local_utility_removed(self):
-        """Test if the IClick2SellSettings local utility was removed."""
-        try:
-            getUtility(IClick2SellSettings)
-        except ComponentLookupError:
-            pass
-
-    def test_control_panel_configlet_removed(self):
-        """Test if the 'Configure ClickBank' control panel configlet was removed."""
-        view = getMultiAdapter((self.portal, self.portal.REQUEST), name="configure-click2sell")
+    def test_click2sell_controlpanel_available(self):
+        """Test if click2sell control panel configlet is available."""
+        view = getMultiAdapter((self.portal, self.portal.REQUEST),
+                               name="click2sell-settings")
         view = view.__of__(self.portal)
-        try:
-            self.failIf(view())
-        except TypeError:
-            pass
+        self.failUnless(view())
+
+    def test_click2sell_controlpanel_view_protected(self):
+        """Check that access to click2sell settings is restricted."""
+        logout()
+        with self.assertRaises(Unauthorized):
+            self.portal.restrictedTraverse('@@click2sell-settings')
+
+    def test_record_akismet_key(self):
+        """Test that the secretkey record is in the registry."""
+        registry = getUtility(IRegistry)
+        record_secretkey = registry.records['niteoweb.click2sell.interfaces.IClick2SellSettings.secretkey']
+
+        from niteoweb.click2sell.interfaces import IClick2SellSettings
+        self.assertIn('secretkey', IClick2SellSettings)
+        self.assertEquals(record_secretkey.value, None)
 
 
 def test_suite():

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4 (Unreleased)
+----------------
+
+- Store configuration in `plone.app.registry` rather than in a local utility.
+  [zupo]
+
 0.3 (2012-01-28)
 ----------------
 

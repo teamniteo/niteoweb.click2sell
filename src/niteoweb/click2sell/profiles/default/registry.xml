@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<registry>
+  <records interface="niteoweb.click2sell.interfaces.IClick2SellSettings" />
+</registry>

@@ -74,7 +74,9 @@ class TestClick2Sell(IntegrationTestCase):
         self.failUnless(verified)
 
     def test_parse_POST(self):
-        """Test that POST parameters are correctly mirrored into member fields."""
+        """Test that POST parameters are correctly mirrored into member
+        fields.
+        """
         params = dict(
             buyer_name='full',
             buyer_surname='name',
@@ -191,7 +193,8 @@ class TestClick2Sell(IntegrationTestCase):
         self.assertEqual(len(self.mailhost.messages), 0)
 
     def test_email_password(self):
-        """Test headers and text of email that is sent to newly created member."""
+        """Test headers and text of email that is sent to newly created
+        member."""
 
         test_data = dict(
             username='john@smith.name',

@@ -12,12 +12,20 @@ _ = Click2SellMessageFactory
 
 # control panel schema
 class IClick2SellSettings(Interface):
-    """This interface defines fields for click2sell plone_control_panel
+    """Global Click2Sell settings.
+
+    This interface describes records stored in the configuration registry and
+    obtainable via plone.registry.
     configlet.
     """
 
-    secretkey = schema.Password(title=_(u"click2sell Secret Key"),
-                                  required=True)
+    secretkey = schema.Password(
+        title=_(u"click2sell Secret Key"),
+        description=_(u"help_secretkey",
+            default=u"Enter the Secret Key you got from Click2Sell to access " \
+                     "their API."),
+        required=True,
+    )
 
 
 # exceptions
