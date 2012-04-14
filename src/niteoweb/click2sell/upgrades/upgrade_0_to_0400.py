@@ -43,3 +43,8 @@ def remove_persistent_utility(setup_tool):
             print "deleting %s" % x
             del provided[x]
     sm.utilities._provided = provided
+
+    for x in sm._utility_registrations.keys():
+        if x[0].__name__ == 'IClick2SellSettings':
+            print 'deleting IClick2SellSettings'
+            del sm._utility_registrations[x]
