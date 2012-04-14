@@ -4,6 +4,10 @@ Changelog
 0.4 (Unreleased)
 ----------------
 
+- Site admins can now map C2S ``product_id`` to groups. This causes new members
+  to be added to the group their ``product_id`` maps to.
+  [zupo]
+
 - Store configuration in `plone.app.registry` rather than in a local utility.
   [zupo]
 

@@ -2,8 +2,11 @@
 """Test all aspects of @@click2sell BrowserView."""
 
 from DateTime import DateTime
+from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.tests.base import IntegrationTestCase
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
 
 import mock
 import unittest2 as unittest
@@ -18,8 +21,16 @@ class TestClick2Sell(IntegrationTestCase):
         self.view = self.portal.restrictedTraverse('click2sell')
         self.registration = getToolByName(self.portal, 'portal_registration')
         self.membership = getToolByName(self.portal, 'portal_membership')
+        self.groups = getToolByName(self.portal, 'portal_groups')
         self.mailhost = getToolByName(self.portal, 'MailHost')
         self.mailhost.reset()
+
+        # configure product_id to group mapping; the groups must also exist
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IClick2SellSettings)
+        settings.mapping = ["1|basic-members", "2|premium-members"]
+        self.groups.addGroup('basic-members')
+        self.groups.addGroup('premium-members')
 
     def test_call_with_no_POST(self):
         """Test @@clicbank's response when POST is empty."""
@@ -142,22 +153,28 @@ class TestClick2Sell(IntegrationTestCase):
         self.assertIn('p: %(password)s' % test_data, msg)
 
         # test that we created group
-        self.assertIn('click2sell', self.portal.portal_groups.getGroupIds())
+        self.assertIn('click2sell', self.groups.getGroupIds())
         self.assertIn('click2sell', member.getGroups())
 
+        # test that member was added to product group
+        self.assertIn('basic-members', member.getGroups())
+
         # now test that if a request for same member is posted this member gets
-        # updated
+        # updated and added to new product group
         test_data['username'] = 'john@smith.name'
+        test_data['product_id'] = '2'
         test_data['last_purchase_id'] = 'invoice_2'
         test_data['last_purchase_timestamp'] = DateTime('2010/02/02')
 
         # run method
         self.view.create_or_update_member(test_data['username'], test_data)
 
-        # test that product_id was updated member
+        # test that member was updated and added to new product group
         member = self.membership.getMemberById(test_data['username'])
+        self.assertEqual(member.getProperty('product_id'), '2')
         self.assertEqual(member.getProperty('last_purchase_id'), 'invoice_2')
         self.assertEqual(member.getProperty('last_purchase_timestamp'), DateTime('2010/02/02'))
+        self.assertIn('premium-members', member.getGroups())
 
     def test_update_member(self):
         """Test updating an existing member with POST parameters."""
@@ -165,11 +182,13 @@ class TestClick2Sell(IntegrationTestCase):
         old_data = dict(
             username='john@smith.name',
             email='john@smith.name',
+            product_id='1',
             last_purchase_id='invoice_1',
             last_purchase_timestamp=DateTime('2010/01/01'),
         )
 
         new_data = old_data
+        new_data['product_id'] = '2'
         new_data['last_purchase_id'] = 'invoice_2'
         new_data['last_purchase_timestamp'] = DateTime('2010/02/02')
 
@@ -189,8 +208,17 @@ class TestClick2Sell(IntegrationTestCase):
         self.assertEqual(member.getProperty('last_purchase_id'), new_data['last_purchase_id'])
         self.assertEqual(member.getProperty('last_purchase_timestamp'), new_data['last_purchase_timestamp'])
 
+        # test that member was added to a new product group
+        self.assertIn('premium-members', member.getGroups())
+
         # test email
         self.assertEqual(len(self.mailhost.messages), 0)
+
+    def test_add_to_product_group(self):
+        """Test that member is added to a product group."""
+        # TODO: test edge-cases:
+        # * group doesn't exist
+        # * member added to group he is already member of
 
     def test_email_password(self):
         """Test headers and text of email that is sent to newly created

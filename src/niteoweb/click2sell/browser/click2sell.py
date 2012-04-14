@@ -2,6 +2,7 @@
 """Handle Click2Sell purchase notifications."""
 
 from DateTime import DateTime
+from niteoweb.click2sell import parse_mapping
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.interfaces import MemberCreatedEvent
 from plone.registry.interfaces import IRegistry
@@ -10,10 +11,14 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.event import notify
+from zope.interface import Invalid
 
 import hashlib
 import random
 import string
+import logging
+
+logger = logging.getLogger("niteoweb.click2sell")
 
 
 class Click2SellView(BrowserView):
@@ -70,8 +75,15 @@ class Click2SellView(BrowserView):
         }
 
     def create_or_update_member(self, username, data):
-        """Creates a new Plone member. In case the member already exists,
-        this method simply updates member's fields.
+        """Creates or update a Plone member.
+
+        This method create a new Plone member if one with selected username does
+        not exist yet.
+
+        In case the member already exists, this method updates member's fields.
+        Besides that, if `Product ID to group mapping` configuration in
+        Click2Sell control panel is set, it also adds the member to the
+        respective group.
 
         :param username: username of member that is to be created/updated
         :type username: string
@@ -90,6 +102,7 @@ class Click2SellView(BrowserView):
         if member:
             # update existing member
             member.setMemberProperties(mapping={
+                'product_id': data['product_id'],
                 'last_purchase_id': data['last_purchase_id'],
                 'last_purchase_timestamp': data['last_purchase_timestamp'],
             })
@@ -99,11 +112,36 @@ class Click2SellView(BrowserView):
             notify(MemberCreatedEvent(self, username))
             self._email_password(username, password, data)
 
-        # create group and add member to it
-        groups = getToolByName(member, 'portal_groups')
+        # create default click2sell group and add member to it
+        groups = getToolByName(self.context, 'portal_groups')
         group_name = "click2sell"
         if group_name not in groups.getGroupIds():
             groups.addGroup(group_name)
+        groups.addPrincipalToGroup(username, group_name)
+
+        # handle product_id to group_name mapping
+        self._add_to_product_group(username, data['product_id'])
+
+    def _add_to_product_group(self, username, product_id):
+        """If ``product_id`` has a group mapping set in control panel,
+        add member to this group."""
+
+        groups = getToolByName(self.context, 'portal_groups')
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IClick2SellSettings)
+
+        try:
+            mapping = parse_mapping(settings.mapping)
+        except Invalid:
+            logger.warn("Due to problems with parsing product_id to group " \
+                "mapping, the member '%s' was not added to group." % username)
+        group_name = mapping.get(product_id)
+
+        if group_name not in groups.getGroupIds():
+            logger.warn("Cannot add a member to group, because group does not" \
+                " exist: '%s'" % group_name)
+            return
+
         groups.addPrincipalToGroup(username, group_name)
 
     def _email_password(self, mto, password, data):
