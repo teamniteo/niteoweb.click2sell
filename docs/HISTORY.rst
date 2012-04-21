@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4 (Unreleased)
+0.4 (2012-04-21)
 ----------------
 
 - Site admins can now map C2S ``product_id`` to groups. This causes new members
