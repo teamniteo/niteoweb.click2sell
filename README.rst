@@ -9,6 +9,7 @@ memberships on your site.
 * `Source code @ GitHub <https://github.com/niteoweb/niteoweb.click2sell>`_
 * `Releases @ PyPI <http://pypi.python.org/pypi/niteoweb.click2sell>`_
 * `Documentation @ ReadTheDocs <http://readthedocs.org/docs/niteowebclick2sell>`_
+* `Continuous Integration @ Travis-CI <http://travis-ci.org/niteoweb/niteoweb.click2sell>`_
 
 
 How it works

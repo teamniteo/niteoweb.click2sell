@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.4.1 (Unreleased)
+------------------
+
+- More tests for groups edge-cases.
+  [zupo]
+
+- Updating package with latest best practices.
+  [zupo]
+
+
 0.4 (2012-04-21)
 ----------------
 
@@ -10,6 +20,7 @@ Changelog
 
 - Store configuration in `plone.app.registry` rather than in a local utility.
   [zupo]
+
 
 0.3 (2012-01-28)
 ----------------
