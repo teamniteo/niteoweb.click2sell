@@ -23,13 +23,4 @@
     provides="Products.GenericSetup.interfaces.EXTENSION"
     />
 
-  <!-- Register the uninstall profile -->
-  <genericsetup:registerProfile
-    name="uninstall"
-    title="niteoweb.click2sell uninstall"
-    directory="profiles/uninstall"
-    description="niteoweb.click2sell uninstall profile"
-    provides="Products.GenericSetup.interfaces.EXTENSION"
-    />
-
 </configure>
