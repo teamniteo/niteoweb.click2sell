@@ -43,11 +43,17 @@ How it works
 #. Upon creating a new member, Plone sends an email with login password.
 #. An ``IMemberCreateEvent`` is emitted upon creating a new member.
 #. The new member can now login and use the site.
+#. It is possible to create a ``product_id`` to ``group_name`` mapping in
+   Plone Control Panel. This means that if a member purchased a product which
+   is listed in this mapping, the member will also be added to a group mapped
+   to this product.
 
 .. note::
 
     If a member already exists in Plone, then the ``@@click2sell`` view simply
     updates ``last_purchase_id`` and ``last_purchase_timestamp`` member fields.
+    The member will also be added to the new product group, but also kept in
+    the old.
 
 
 Demo
@@ -86,6 +92,23 @@ Plone
 
 Go to ``Site Setup`` -> ``click2sell`` control panel form and configure
 the ``Secret Key`` field by pasting in the `Secret Key` you defined above.
+
+You can also configure the ``product_id`` to ``group_name`` mapping. This comes
+in effect when member purchases a product which is listed in this mapping, the
+member will also be added to a group mapped to this product.
+
+For example, imagine you have the following in your mapping::
+
+    1|basic-members
+    2|premium-members
+
+Members purchasing the product with id ``1`` will be added to the
+``basic-members`` group, whose purchasing ``2`` will be added to the
+``premium-members`` group. For others, nothing will be done.
+
+When switching products, an updated member will be added to new product
+group, but also kept in the old group. No information is removed/deleted.
+
 
 Test it
 =======
