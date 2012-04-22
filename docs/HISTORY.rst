@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.1 (Unreleased)
+0.4.1 (2012-04-22)
 ------------------
 
 - More tests for groups edge-cases.
