@@ -133,13 +133,13 @@ class Click2SellView(BrowserView):
         try:
             mapping = parse_mapping(settings.mapping)
         except Invalid:
-            logger.warn("Due to problems with parsing product_id to group " \
+            logger.error("Due to problems with parsing product_id to group " \
                 "mapping, the member '%s' was not added to group." % username)
         group_name = mapping.get(product_id)
 
         if group_name not in groups.getGroupIds():
-            logger.warn("Cannot add a member to group, because group does not" \
-                " exist: '%s'" % group_name)
+            logger.error("Cannot add a member (%s) to group, because group " \
+                "does not exist: '%s'" % (username, group_name))
             return
 
         groups.addPrincipalToGroup(username, group_name)
