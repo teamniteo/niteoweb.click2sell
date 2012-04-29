@@ -87,10 +87,8 @@ class Click2SellView(BrowserView):
 
         :param username: username of member that is to be created/updated
         :type username: string
-
         :param data: member data of member that is to be created/updated
         :type data: dict
-
         """
 
         registration = getToolByName(self.context, 'portal_registration')
@@ -124,7 +122,13 @@ class Click2SellView(BrowserView):
 
     def _add_to_product_group(self, username, product_id):
         """If ``product_id`` has a group mapping set in control panel,
-        add member to this group."""
+        add member to this group.
+
+        :param username: username of member that is to be added to a group
+        :type username: string
+        :param data: product_id to find in the mapping
+        :type data: string
+        """
 
         groups = getToolByName(self.context, 'portal_groups')
         registry = getUtility(IRegistry)
