@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.4.2 (2012-04-29)
+------------------
+
+- Made ``click2sell key`` non-required so we can modify the product_id to
+  group_name mapping without always supplying the ``click2sell key``.
+  [zupo]
+
+- Even more work on groups edge-cases.
+  [zupo]
+
+
 0.4.1 (2012-04-22)
 ------------------
 
