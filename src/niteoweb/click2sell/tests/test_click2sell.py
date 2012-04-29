@@ -4,6 +4,7 @@
 from DateTime import DateTime
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.tests.base import IntegrationTestCase
+from plone.app.testing import TEST_USER_NAME
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
@@ -27,8 +28,8 @@ class TestClick2Sell(IntegrationTestCase):
 
         # configure product_id to group mapping; the groups must also exist
         registry = getUtility(IRegistry)
-        settings = registry.forInterface(IClick2SellSettings)
-        settings.mapping = ["1|basic-members", "2|premium-members"]
+        self.settings = registry.forInterface(IClick2SellSettings)
+        self.settings.mapping = ["1|basic-members", "2|premium-members"]
         self.groups.addGroup('basic-members')
         self.groups.addGroup('premium-members')
 
@@ -214,11 +215,73 @@ class TestClick2Sell(IntegrationTestCase):
         # test email
         self.assertEqual(len(self.mailhost.messages), 0)
 
-    def test_add_to_product_group(self):
+    @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._generate_password')
+    def test_create_member_without_group_mapping(self, generate_password):
+        """Test creating a new member when group mapping does not match
+        any group to member's product_id.
+        """
+        generate_password.return_value = 'secret123'
+
+        test_data = dict(
+            username='john@smith.name',
+            password='secret123',
+            email='john@smith.name',
+            fullname='John Smith',
+            product_id='1',
+            product_name='product_name',
+            affiliate='Jane Affiliate',
+            last_purchase_id='invoice_1',
+            last_purchase_timestamp=DateTime('2010/01/01'),
+        )
+
+        self.settings.mapping = ["3|other-members", "2|premium-members"]
+
+        # run method
+        self.view.create_or_update_member(test_data['username'], test_data)
+
+        # test member
+        member = self.portal.portal_membership.getMemberById(test_data['username'])
+        self.assertEqual(member.getProperty('email'), test_data['email'])
+        self.assertEqual(member.getProperty('fullname'), test_data['fullname'])
+        self.assertEqual(member.getProperty('product_id'), test_data['product_id'])
+        self.assertEqual(member.getProperty('product_name'), test_data['product_name'])
+        self.assertEqual(member.getProperty('affiliate'), test_data['affiliate'])
+        self.assertEqual(member.getProperty('last_purchase_id'), test_data['last_purchase_id'])
+        self.assertEqual(member.getProperty('last_purchase_timestamp'), test_data['last_purchase_timestamp'])
+
+        # test email
+        self.assertEqual(len(self.mailhost.messages), 1)
+        msg = self.mailhost.messages[0]
+        self.assertIn('To: %(email)s' % test_data, msg)
+        self.assertIn('Subject: =?utf-8?q?Your_Plone_site_login_credentials', msg)
+        self.assertIn('u: %(username)s' % test_data, msg)
+        self.assertIn('p: %(password)s' % test_data, msg)
+
+        # test that we created clic2sell group
+        self.assertIn('click2sell', self.groups.getGroupIds())
+        self.assertIn('click2sell', member.getGroups())
+
+        # test that member is not added to any product groups
+        self.assertEqual(['click2sell', 'AuthenticatedUsers'], member.getGroups())
+
+    @mock.patch('niteoweb.click2sell.browser.click2sell.logger')
+    def test_add_to_product_group_edge_cases(self, logger):
         """Test that member is added to a product group."""
-        # TODO: test edge-cases:
-        # * group doesn't exist
-        # * member added to group he is already member of
+        # first, let's test what happens if product_id is not found
+        self.view._add_to_product_group(TEST_USER_NAME, '666')
+        logger.error.assert_called_with("Product_id 666 does not have a" \
+            " group assigned.")
+
+        # next, let's test what happens if group for product_id is not found
+        self.settings.mapping = ["13|foo-members"]
+        self.view._add_to_product_group(TEST_USER_NAME, '13')
+        logger.error.assert_called_with("Cannot add a member (test-user) to a" \
+            " group, because group does not exist: 'foo-members'")
+
+        # now let's add a member to a group and test that nothing happens when
+        # @@click2sell want's to add a member to this group again
+        self.groups.addPrincipalToGroup(TEST_USER_NAME, 'basic-members')
+        self.view._add_to_product_group(TEST_USER_NAME, '1')
 
     def test_email_password(self):
         """Test headers and text of email that is sent to newly created
