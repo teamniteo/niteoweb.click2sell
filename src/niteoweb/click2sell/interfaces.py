@@ -23,7 +23,7 @@ class IClick2SellSettings(Interface):
         description=_(u"help_secretkey",
             default=u"Enter the Secret Key you got from Click2Sell to access " \
                      "their API."),
-        required=True,
+        required=False,
     )
 
     mapping = schema.List(
