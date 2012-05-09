@@ -38,17 +38,18 @@ Viewing the click2sell control panel
 Click the save button without making any changes:
 
     >>> browser.getControl(name="form.buttons.save").click()
-    >>> browser.url.endswith('plone_control_panel')
+    >>> browser.url.endswith('click2sell-settings')
     True
 
-We get a 'Changes saved' message, even though we didn't really do anything:
+We should get a status message:
 
-    >>> 'Changes saved.' in browser.contents
+    >>> 'There were some errors' in browser.contents
+    True
+    >>> 'Required input is missing' in browser.contents
     True
 
-Now go back and click the click the cancel button:
+Now click the cancel button:
 
-    >>> browser.open('http://nohost/plone/@@click2sell-settings')
     >>> browser.getControl(name="form.buttons.cancel").click()
     >>> browser.url.endswith('plone_control_panel')
     True
