@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.2 (Unreleased)
+0.4.3 (2012-06-01)
 ------------------
 
 - More verbose POST error handling.
