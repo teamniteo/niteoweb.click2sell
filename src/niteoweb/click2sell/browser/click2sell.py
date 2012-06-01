@@ -25,24 +25,27 @@ class Click2SellView(BrowserView):
     """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
-
         # check for POST request
         if not self.request.form:
-            self.request.response.setStatus(400, lock=True)
             return 'No POST request.'
 
-        # verify POST request
+        # prepare values
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IClick2SellSettings)
         params = dict(self.request.form)
         params['secretkey'] = settings.secretkey
 
-        if not self._verify_POST(params):
-            self.request.response.setStatus(400, lock=True)
-            return 'POST verification failed.'
+        try:
+            # verify and parse post
+            self._verify_POST(params)
+            data = self._parse_POST(params)
+        except AssertionError:
+            return 'POST verification failed: Checksum verification failed.'
+        except KeyError as ex:
+            return 'POST parameter missing: %s' % ex
+        except Exception:
+            return 'POST handling failed: %s' % ex
 
-        # parse and handle POST
-        data = self._parse_POST(params)
         self.create_or_update_member(data['username'], data)
         return 'POST successfully parsed.'
 
@@ -54,7 +57,7 @@ class Click2SellView(BrowserView):
 
         """
         request_data = "%(secretkey)s_%(acquirer_transaction_id)s" % params
-        return params['checksum'] == hashlib.md5(request_data).hexdigest().upper()
+        assert params['checksum'] == hashlib.md5(request_data).hexdigest().upper(), 'Checksum verification failed.'
 
     def _parse_POST(self, params):
         """Parses POST from Click2Sell and extracts information we need.

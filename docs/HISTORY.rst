@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.4.2 (Unreleased)
+------------------
+
+- More verbose POST error handling.
+  [zupo]
+
+- Revert making click2sell key non-required so we can edit the mapping without
+  always supplying the key.
+  [zupo]
+
+
 0.4.2 (2012-04-29)
 ------------------
 

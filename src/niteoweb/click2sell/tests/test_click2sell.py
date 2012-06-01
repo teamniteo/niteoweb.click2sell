@@ -38,19 +38,29 @@ class TestClick2Sell(IntegrationTestCase):
         html = self.view()
         self.failUnless('No POST request.' in html)
 
-    @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
-    def test_call_with_invalid_POST(self, verify_post):
-        """Test @@clicbank's response when POST cannot be verified."""
+    def test_call_with_missing_parameter(self):
+        """Test @@clicbank's response when POST is missing a parameter."""
 
         # put something into self.request.form so it's not empty
-        self.portal.REQUEST.form = dict(value='non empty value')
-
-        # mock return from _verify_POST
-        verify_post.return_value = False
+        self.portal.REQUEST.form = dict(foo='bar')
 
         # test
         html = self.view()
-        self.assertIn('POST verification failed.', html)
+        self.assertEqual(html, "POST parameter missing: 'acquirer_transaction_id'")
+
+    @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
+    def test_call_with_invalid_checksum(self, verify_post):
+        """Test @@clicbank's response when checksum cannot be verified."""
+
+        # put something into self.request.form so it's not empty
+        self.portal.REQUEST.form = dict(foo='bar')
+
+        # mock return from _verify_POST
+        verify_post.side_effect = AssertionError
+
+        # test
+        html = self.view()
+        self.assertEqual(html, 'POST verification failed: Checksum verification failed.')
 
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._parse_POST')
@@ -82,8 +92,8 @@ class TestClick2Sell(IntegrationTestCase):
             acquirer_transaction_id='123',
             checksum='B457E9433F98EF22AA9DD9BA4A5E2B16',
         )
-        verified = self.view._verify_POST(params)
-        self.failUnless(verified)
+        self.view._verify_POST(params)
+        self.assertTrue(True)  # no exceptions were raised, test should pass
 
     def test_parse_POST(self):
         """Test that POST parameters are correctly mirrored into member
