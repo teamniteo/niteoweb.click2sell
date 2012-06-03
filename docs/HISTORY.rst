@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.4 (Unreleased)
+0.4.4 (2012-06-03)
 ------------------
 
 - Previous release was swallowing errors. Re-thinked how handling and displaying
