@@ -42,7 +42,11 @@ class IClick2SellSettings(Interface):
 
 # exceptions
 class Click2SellError(Exception):
-    """Exception class for niteoweb.click2sell project"""
+    """Exception class for niteoweb.click2sell project."""
+
+
+class SecretKeyNotSet(Click2SellError):
+    """Exception thrown where secret-key for click2sell is not set."""
 
 
 # events

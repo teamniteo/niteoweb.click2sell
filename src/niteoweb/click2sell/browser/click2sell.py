@@ -3,6 +3,7 @@
 
 from DateTime import DateTime
 from niteoweb.click2sell import parse_mapping
+from niteoweb.click2sell.interfaces import SecretKeyNotSet
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.interfaces import MemberCreatedEvent
 from plone.registry.interfaces import IRegistry
@@ -25,6 +26,7 @@ class Click2SellView(BrowserView):
     """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
+
         # check for POST request
         if not self.request.form:
             return 'No POST request.'
@@ -39,14 +41,24 @@ class Click2SellView(BrowserView):
             # verify and parse post
             self._verify_POST(params)
             data = self._parse_POST(params)
-        except AssertionError:
-            return 'POST verification failed: Checksum verification failed.'
-        except KeyError as ex:
-            return 'POST parameter missing: %s' % ex
-        except Exception:
-            return 'POST handling failed: %s' % ex
+            self.create_or_update_member(data['username'], data)
 
-        self.create_or_update_member(data['username'], data)
+        # something went wrong?
+        except KeyError as ex:
+            msg = "POST parameter missing: %s" % ex
+            logger.error(msg)
+            return msg
+
+        except AssertionError:
+            msg = "Checksum verification failed."
+            logger.error(msg)
+            return msg
+
+        except Exception as ex:
+            msg = "POST handling failed: %s" % ex
+            logger.error(msg)
+            return msg
+
         return 'POST successfully parsed.'
 
     def _verify_POST(self, params):
@@ -56,6 +68,8 @@ class Click2SellView(BrowserView):
         :type params: dict
 
         """
+        if not params['secretkey']:
+            raise SecretKeyNotSet('C2S secret-key is not set!')
         request_data = "%(secretkey)s_%(acquirer_transaction_id)s" % params
         assert params['checksum'] == hashlib.md5(request_data).hexdigest().upper(), 'Checksum verification failed.'
 

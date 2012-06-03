@@ -18,6 +18,25 @@ from Products.CMFPlone.tests.utils import MockMailHost
 from Products.MailHost.interfaces import IMailHost
 from zope.site.hooks import getSite
 
+import logging
+
+
+class MockedLoggingHandler(logging.Handler):
+
+    debug = []
+    warning = []
+    info = []
+    error = []
+
+    def emit(self, record):
+        getattr(self.__class__, record.levelname.lower()).append(record.getMessage())
+
+    @classmethod
+    def reset(cls):
+        for attr in dir(cls):
+            if isinstance(getattr(cls, attr), list):
+                setattr(cls, attr, [])
+
 
 class NiteowebClick2sellLayer(PloneSandboxLayer):
 
@@ -50,6 +69,11 @@ class NiteowebClick2sellLayer(PloneSandboxLayer):
         portal.portal_catalog.clearFindAndRebuild()
         import transaction
         transaction.commit()
+
+        # add a logging handler that stores everything in a list so we can
+        # later assert on it
+        logger = logging.getLogger('niteoweb.click2sell')
+        logger.addHandler(MockedLoggingHandler())
 
     def tearDownZope(self, app):
         """Tear down Zope."""

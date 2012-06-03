@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.4.4 (Unreleased)
+------------------
+
+- Previous release was swallowing errors. Re-thinked how handling and displaying
+  errors should be done and rewrote most of it. Also added more tests to assert
+  error messages in response bodies and in the Zope log.
+  [zupo]
+
+
 0.4.3 (2012-06-01)
 ------------------
 

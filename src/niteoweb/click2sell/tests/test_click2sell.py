@@ -4,6 +4,7 @@
 from DateTime import DateTime
 from niteoweb.click2sell.interfaces import IClick2SellSettings
 from niteoweb.click2sell.tests.base import IntegrationTestCase
+from niteoweb.click2sell.tests.base import MockedLoggingHandler as logger
 from plone.app.testing import TEST_USER_NAME
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
@@ -30,8 +31,14 @@ class TestClick2Sell(IntegrationTestCase):
         registry = getUtility(IRegistry)
         self.settings = registry.forInterface(IClick2SellSettings)
         self.settings.mapping = ["1|basic-members", "2|premium-members"]
+        self.settings.secretkey = u'secret'
         self.groups.addGroup('basic-members')
         self.groups.addGroup('premium-members')
+
+    def tearDown(self):
+        """Clean up after yourself."""
+        # reset our mocked logger
+        logger.reset()
 
     def test_call_with_no_POST(self):
         """Test @@clicbank's response when POST is empty."""
@@ -46,7 +53,21 @@ class TestClick2Sell(IntegrationTestCase):
 
         # test
         html = self.view()
-        self.assertEqual(html, "POST parameter missing: 'acquirer_transaction_id'")
+        self.assertEqual(html, "POST parameter missing: u'acquirer_transaction_id'")
+        self.assertEqual(logger.error[0][:72], "POST parameter missing: u'acquirer_transaction_id'")
+
+    def test_call_with_missing_secret_key(self):
+        """Test @@clicbank's response when C2S secret-key is not set."""
+
+        # put something into self.request.form so it's not empty
+        self.portal.REQUEST.form = dict(foo='bar')
+
+        self.settings.secretkey = None
+
+        # test
+        html = self.view()
+        self.assertEqual(html, "POST handling failed: C2S secret-key is not set!")
+        self.assertEqual(logger.error[0], "POST handling failed: C2S secret-key is not set!")
 
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
     def test_call_with_invalid_checksum(self, verify_post):
@@ -60,7 +81,25 @@ class TestClick2Sell(IntegrationTestCase):
 
         # test
         html = self.view()
-        self.assertEqual(html, 'POST verification failed: Checksum verification failed.')
+        self.assertEqual(html, 'Checksum verification failed.')
+        self.assertEqual(logger.error[0][:51], "Checksum verification failed.")
+
+    @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
+    def test_call_with_internal_exception(self, verify_post):
+        """Test @@clicbank's response when there is an internal problem with the
+        code.
+        """
+
+        # put something into self.request.form so it's not empty
+        self.portal.REQUEST.form = dict(foo='bar')
+
+        # mock return from _verify_POST
+        verify_post.side_effect = Exception('Internal foo.')
+
+        # test
+        html = self.view()
+        self.assertEqual(html, 'POST handling failed: Internal foo.')
+        self.assertEqual(logger.error[0], "POST handling failed: Internal foo.")
 
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._verify_POST')
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._parse_POST')
