@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Upgrade from version 0.3 to version 0.4."""
+"""
+Upgrade from version 0.3 to version 0.4
+---------------------------------------
+"""
 
 
 def upgrade(context):
@@ -17,7 +20,7 @@ def upgrade(context):
 
 
 def remove_persistent_utility(setup_tool):
-    """"Code taken from
+    """Code taken from
     http://blog.fourdigits.nl/removing-a-persistent-local-utility-part-ii.
     """
     portal = setup_tool.getParentNode()

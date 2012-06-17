@@ -44,6 +44,7 @@ setup(
             'mock',
             'plone.app.testing',
             'Products.PloneTestCase',
+            'repoze.sphinx.autointerface',  # this is not really used in tests
             'unittest2',
         ],
         # list libs needed for releasing this project

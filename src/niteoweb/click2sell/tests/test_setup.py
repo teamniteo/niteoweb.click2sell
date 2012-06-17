@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Setup/installation tests for this package."""
+"""
+Setup/installation tests for niteoweb.click2sell
+------------------------------------------------
+"""
 
 from AccessControl import Unauthorized
 from plone.registry.interfaces import IRegistry

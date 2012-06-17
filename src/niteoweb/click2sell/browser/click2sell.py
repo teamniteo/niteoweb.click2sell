@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Handle Click2Sell purchase notifications."""
+"""
+Handling Click2Sell purchase notifications
+------------------------------------------
+"""
 
 from DateTime import DateTime
 from niteoweb.click2sell import parse_mapping
@@ -26,6 +29,7 @@ class Click2SellView(BrowserView):
     """A BrowserView that Click2Sell calls after a purchase."""
 
     def __call__(self):
+        """Request handler for Click2Sell purchase notifications."""
 
         # check for POST request
         if not self.request.form:
@@ -92,7 +96,7 @@ class Click2SellView(BrowserView):
         }
 
     def create_or_update_member(self, username, data):
-        """Creates or update a Plone member.
+        """Creates or updates a Plone member.
 
         This method create a new Plone member if one with selected username does
         not exist yet.

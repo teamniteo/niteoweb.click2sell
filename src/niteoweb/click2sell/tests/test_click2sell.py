@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Test all aspects of @@click2sell BrowserView."""
+"""
+Test all aspects of the @@click2sell BrowserView
+------------------------------------------------
+"""
 
 from DateTime import DateTime
 from niteoweb.click2sell.interfaces import IClick2SellSettings
@@ -306,7 +309,7 @@ class TestClick2Sell(IntegrationTestCase):
         self.assertIn('u: %(username)s' % test_data, msg)
         self.assertIn('p: %(password)s' % test_data, msg)
 
-        # test that we created clic2sell group
+        # test that we created click2sell group
         self.assertIn('click2sell', self.groups.getGroupIds())
         self.assertIn('click2sell', member.getGroups())
 

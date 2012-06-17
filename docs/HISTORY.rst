@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4.5 (Unreleased)
+------------------
+
+- Added automatically generated source code documentation.
+  [zupo]
+
+
 0.4.4 (2012-06-03)
 ------------------
 

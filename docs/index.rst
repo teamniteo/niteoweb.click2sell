@@ -10,6 +10,7 @@ Developer documentation
     dev.rst
     conventions.rst
     release.rst
+    source.rst
 
 
 .. include:: HISTORY.rst

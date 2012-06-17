@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Where all interfaces, events and exceptions live."""
+"""
+Interfaces, Events and Exceptions
+---------------------------------
+"""
 
 from niteoweb.click2sell import Click2SellMessageFactory as _
 from zope import schema
@@ -11,12 +14,7 @@ from niteoweb.click2sell import parse_mapping
 
 # control panel schema
 class IClick2SellSettings(Interface):
-    """Global Click2Sell settings.
-
-    This interface describes records stored in the configuration registry and
-    obtainable via plone.registry.
-    configlet.
-    """
+    """Definition of fields for niteoweb.click2sell configuration form."""
 
     secretkey = schema.Password(
         title=_(u"click2sell Secret Key"),
@@ -42,16 +40,16 @@ class IClick2SellSettings(Interface):
 
 # exceptions
 class Click2SellError(Exception):
-    """Exception class for niteoweb.click2sell project."""
+    """Base class for niteoweb.click2sell exception."""
 
 
 class SecretKeyNotSet(Click2SellError):
-    """Exception thrown where secret-key for click2sell is not set."""
+    """Exception thrown when secret-key for click2sell is not set."""
 
 
 # events
 class IClick2SellEvent(Interface):
-    """Base interface for niteoweb.click2sell events."""
+    """Base class for niteoweb.click2sell events."""
 
 
 class IMemberCreatedEvent(IClick2SellEvent):

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Base module for unittesting."""
+"""
+Base module for unittesting
+---------------------------
+"""
 
 import unittest2 as unittest
 
@@ -101,4 +104,5 @@ class FunctionalTestCase(unittest.TestCase):
 
 class Click2SellControlPanelTestCase(FunctionalTestCase, ControlPanelTestCase):
     """Test case used for control panel tests, with some convenience
-    methods from plone.app.controlpanel. """
+    methods from plone.app.controlpanel.
+    """

@@ -17,7 +17,12 @@
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.viewcode']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.viewcode',
+    'repoze.sphinx.autointerface',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -189,3 +194,7 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+# don't order auto-documentation alphabetically, but rather by how it is in the
+# source
+autodoc_member_order = 'bysource'
