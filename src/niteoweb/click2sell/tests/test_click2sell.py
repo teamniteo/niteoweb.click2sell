@@ -167,6 +167,40 @@ class TestClick2Sell(IntegrationTestCase):
         result = self.view._parse_POST(params)
         self.assertEqual(result, expected)
 
+    def test_parse_POST_with_umlaut(self):
+        """Test that POST parameters are correctly mirrored into member
+        fields.
+        """
+        params = dict(
+            buyer_name='füll',
+            buyer_surname='name',
+            buyer_email='email',
+            c2s_transaction_id='last_purchase_id',
+            product_id='product_id',
+            product_name='product_name',
+            affiliate_username='affiliate',
+            purchase_date='2010-01-01',
+            purchase_time='00:00:00',
+        )
+
+        expected = dict(
+            fullname=u'füll name',
+            username='email',
+            email='email',
+            product_id='product_id',
+            product_name='product_name',
+            affiliate='affiliate',
+            last_purchase_id='last_purchase_id',
+            last_purchase_timestamp=DateTime('2010-01-01 00:00:00'),
+        )
+
+        try:
+            result = self.view._parse_POST(params)
+        except:
+            self.fail("UnicodeDecodeError in params")
+
+        self.assertEqual(result, expected)
+
     @mock.patch('niteoweb.click2sell.browser.click2sell.Click2SellView._generate_password')
     def test_create_member(self, generate_password):
         """Test creating a new member out of POST parameters."""
