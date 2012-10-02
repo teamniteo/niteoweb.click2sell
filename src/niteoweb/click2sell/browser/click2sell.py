@@ -30,7 +30,6 @@ class Click2SellView(BrowserView):
 
     def __call__(self):
         """Request handler for Click2Sell purchase notifications."""
-
         # check for POST request
         if not self.request.form:
             return 'No POST request.'
@@ -87,7 +86,10 @@ class Click2SellView(BrowserView):
         return {
             'username': params['buyer_email'],
             'email': params['buyer_email'],
-            'fullname': u"%s %s" % (params['buyer_name'], params['buyer_surname']),
+            'fullname': u"%s %s" % (
+                params['buyer_name'].decode("utf-8"),
+                params['buyer_surname'].decode("utf-8")
+            ),
             'product_id': params['product_id'],
             'product_name': params['product_name'],
             'affiliate': params['affiliate_username'],
