@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.5 (Unreleased)
+0.4.5 (2012-10-02)
 ------------------
 
 - Added support for UTF-8 characters in `name` and `surname`.
