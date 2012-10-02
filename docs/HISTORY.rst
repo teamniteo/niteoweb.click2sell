@@ -4,6 +4,9 @@ Changelog
 0.4.5 (Unreleased)
 ------------------
 
+- Added support for UTF-8 characters in `name` and `surname`.
+  [matejc]
+
 - Added automatically generated source code documentation.
   [zupo]
 
